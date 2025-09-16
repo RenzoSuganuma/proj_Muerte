@@ -6,9 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "MuerteHUDBase.generated.h"
 
-/**
- * 
- */
+// MuerteのHUD基底クラス
 UCLASS()
 class PROJ_MUERTE_API AMuerteHUDBase : public AHUD
 {

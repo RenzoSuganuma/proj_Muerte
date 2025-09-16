@@ -6,9 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "MuerteGameModeBase.generated.h"
 
-/**
- * 
- */
+// Muerteゲームモード基底クラス
 UCLASS()
 class PROJ_MUERTE_API AMuerteGameModeBase : public AGameModeBase
 {

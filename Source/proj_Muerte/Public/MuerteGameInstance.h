@@ -7,9 +7,7 @@
 #include "MuertePlayerControllerBase.h"
 #include "MuerteGameInstance.generated.h"
 
-/**
- * 
- */
+// Muerteゲームインスタンスのクラス
 UCLASS()
 class PROJ_MUERTE_API UMuerteGameInstance : public UGameInstance
 {

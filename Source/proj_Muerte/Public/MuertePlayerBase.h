@@ -9,6 +9,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "MuertePlayerBase.generated.h"
 
+// 主観視点プレイヤーのベース
 UCLASS()
 class PROJ_MUERTE_API AMuertePlayerBase : public ACharacter
 {

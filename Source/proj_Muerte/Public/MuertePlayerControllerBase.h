@@ -8,9 +8,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "MuertePlayerControllerBase.generated.h"
 
-/**
- * 
- */
+// プレイヤーコントローラーの基底クラス
 UCLASS()
 class PROJ_MUERTE_API AMuertePlayerControllerBase : public APlayerController
 {
@@ -21,7 +19,7 @@ class PROJ_MUERTE_API AMuertePlayerControllerBase : public APlayerController
 
 private:
 	TObjectPtr<UEnhancedInputComponent> m_inputComponent;
-	
+
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 
