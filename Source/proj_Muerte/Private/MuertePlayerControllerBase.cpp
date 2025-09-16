@@ -3,7 +3,6 @@
 
 #include "MuertePlayerControllerBase.h"
 #include "MuerteGameInstance.h"
-#include "EnhancedInputComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void AMuertePlayerControllerBase::BeginPlay()
@@ -17,8 +16,7 @@ void AMuertePlayerControllerBase::BeginPlay()
 
 	if (UEnhancedInputComponent* component = CastChecked<UEnhancedInputComponent>(InputComponent))
 	{
-		component->BindAction(m_inputActionMove, ETriggerEvent::Triggered, this,
-		                      &AMuertePlayerControllerBase::ActionMove);
+		m_inputComponent = component;
 	}
 
 	if (UEnhancedInputLocalPlayerSubsystem* inputSystem = GetLocalPlayer()->GetSubsystem<
@@ -39,8 +37,7 @@ void AMuertePlayerControllerBase::Destroyed()
 	}
 }
 
-void AMuertePlayerControllerBase::ActionMove(const FInputActionValue& in_actionValue)
+TObjectPtr<UEnhancedInputComponent> AMuertePlayerControllerBase::GetInputComponent()
 {
-	auto moveVec = in_actionValue.Get<FVector2D>();
-	UKismetSystemLibrary::PrintString(this, moveVec.ToString());
+	return m_inputComponent;
 }

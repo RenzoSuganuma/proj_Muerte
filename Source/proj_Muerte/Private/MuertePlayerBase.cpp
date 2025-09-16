@@ -2,6 +2,8 @@
 
 
 #include "MuertePlayerBase.h"
+#include "MuerteGameInstance.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AMuertePlayerBase::AMuertePlayerBase()
@@ -15,6 +17,7 @@ void AMuertePlayerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// カメラコンポーネントを取得
 	TArray<USceneComponent*> components;
 	GetRootComponent()->GetChildrenComponents(true, components);
 	for (auto c : components)
@@ -25,10 +28,18 @@ void AMuertePlayerBase::BeginPlay()
 			m_cameraComponent = camera;
 		}
 	}
-
+	// FOV設定
 	if (IsValid(m_cameraComponent))
 	{
 		m_cameraComponent->SetFieldOfView(m_fovDefault);
+	}
+
+	// 入力のセットアップ
+	if (UMuerteGameInstance* instance = Cast<UMuerteGameInstance>(GetGameInstance()))
+	{
+		instance->GetPlayerController()->GetInputComponent()->BindAction(
+			m_inputActionMove, ETriggerEvent::Triggered, this,
+			&AMuertePlayerBase::ActionMove);
 	}
 }
 
@@ -42,4 +53,10 @@ void AMuertePlayerBase::Tick(float DeltaTime)
 void AMuertePlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void AMuertePlayerBase::ActionMove(const FInputActionValue& in_actionValue)
+{
+	auto moveVec = in_actionValue.Get<FVector2D>();
+	UKismetSystemLibrary::PrintString(this, moveVec.ToString());
 }

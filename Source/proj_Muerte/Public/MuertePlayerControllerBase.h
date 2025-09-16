@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "MuertePlayerControllerBase.generated.h"
 
@@ -18,13 +19,12 @@ class PROJ_MUERTE_API AMuertePlayerControllerBase : public APlayerController
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputMappingContext> m_mappingContext;
 
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<UInputAction> m_inputActionMove;
-
 private:
+	TObjectPtr<UEnhancedInputComponent> m_inputComponent;
+	
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 
 public:
-	void ActionMove(const FInputActionValue& in_actionValue);
+	TObjectPtr<UEnhancedInputComponent> GetInputComponent();
 };

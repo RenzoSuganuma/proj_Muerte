@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "MuertePlayerBase.generated.h"
 
 UCLASS()
@@ -18,6 +20,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float m_fovDefault = 70.0f;
+	
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> m_inputActionMove;
 
 public:
 	// Sets default values for this character's properties
@@ -33,4 +38,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void ActionMove(const FInputActionValue& in_actionValue);
 };
