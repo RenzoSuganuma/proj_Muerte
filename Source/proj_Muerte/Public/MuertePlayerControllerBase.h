@@ -14,10 +14,10 @@ class PROJ_MUERTE_API AMuertePlayerControllerBase : public APlayerController
 {
 	GENERATED_BODY()
 
+private:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputMappingContext> m_mappingContext;
 
-private:
 	TObjectPtr<UEnhancedInputComponent> m_inputComponent;
 
 	virtual void BeginPlay() override;

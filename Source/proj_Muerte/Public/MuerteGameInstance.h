@@ -13,7 +13,8 @@ class PROJ_MUERTE_API UMuerteGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
-	friend class AMuertePlayerControllerBase;
+	// 
+	friend class AMuertePlayerControllerBase; // ←サービスロケーター的な使い方をしたいのでこのような書き方
 
 private:
 	TObjectPtr<AMuertePlayerControllerBase> m_playerController;
