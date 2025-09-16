@@ -24,5 +24,6 @@ private:
 	virtual void Destroyed() override;
 
 public:
+	// EnhancedInputComponentを返す
 	TObjectPtr<UEnhancedInputComponent> GetInputComponent();
 };

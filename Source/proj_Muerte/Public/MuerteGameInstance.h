@@ -19,5 +19,6 @@ private:
 	TObjectPtr<AMuertePlayerControllerBase> m_playerController;
 
 public:
+	// MuertePlayerControllerを返す
 	TObjectPtr<AMuertePlayerControllerBase> GetPlayerController();
 };
