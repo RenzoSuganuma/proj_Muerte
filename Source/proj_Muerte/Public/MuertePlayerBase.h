@@ -21,9 +21,11 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float m_fovDefault = 70.0f;
-	
+
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> m_inputActionMove;
+	
+	FVector2D m_input;
 
 public:
 	// Sets default values for this character's properties
@@ -38,7 +40,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	// WASD移動の入力が入った時
 	void ActionMove(const FInputActionValue& in_actionValue);
+	// 入力→入力なしの状態になった時
+	void OnMoveCanceled(const FInputActionValue& in_actionValue);
 };

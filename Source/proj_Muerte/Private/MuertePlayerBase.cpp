@@ -3,6 +3,8 @@
 
 #include "MuertePlayerBase.h"
 #include "MuerteGameInstance.h"
+#include "Components/ArrowComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
@@ -23,13 +25,14 @@ void AMuertePlayerBase::BeginPlay()
 	for (auto c : components)
 	{
 		UCameraComponent* camera = Cast<UCameraComponent>(c);
-		if (IsValid(camera))
+		if (camera)
 		{
 			m_cameraComponent = camera;
 		}
 	}
+
 	// FOV設定
-	if (IsValid(m_cameraComponent))
+	if (m_cameraComponent)
 	{
 		m_cameraComponent->SetFieldOfView(m_fovDefault);
 	}
@@ -37,9 +40,19 @@ void AMuertePlayerBase::BeginPlay()
 	// 入力のセットアップ
 	if (UMuerteGameInstance* instance = Cast<UMuerteGameInstance>(GetGameInstance()))
 	{
-		instance->GetPlayerController()->GetInputComponent()->BindAction(
-			m_inputActionMove, ETriggerEvent::Triggered, this,
-			&AMuertePlayerBase::ActionMove);
+		if (TObjectPtr<UEnhancedInputComponent> input = instance->GetPlayerController()->GetInputComponent())
+		{
+			input->BindAction(
+				m_inputActionMove, ETriggerEvent::Triggered, this,
+				&AMuertePlayerBase::ActionMove);
+
+			input->BindAction(
+				m_inputActionMove, ETriggerEvent::Completed, this,
+				&AMuertePlayerBase::OnMoveCanceled);
+			input->BindAction(
+				m_inputActionMove, ETriggerEvent::Canceled, this,
+				&AMuertePlayerBase::OnMoveCanceled);
+		}
 	}
 }
 
@@ -47,6 +60,17 @@ void AMuertePlayerBase::BeginPlay()
 void AMuertePlayerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	auto arrow = GetArrowComponent();
+	auto move = GetCharacterMovement();
+	if (move and arrow)
+	{
+		auto forwardV = arrow->GetForwardVector() * m_input.Y;
+		auto rightV = arrow->GetRightVector() * m_input.X;
+		auto inputRaw = (forwardV + rightV);
+		inputRaw.Normalize();
+		move->AddInputVector(inputRaw);
+	}
 }
 
 // Called to bind functionality to input
@@ -57,6 +81,10 @@ void AMuertePlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AMuertePlayerBase::ActionMove(const FInputActionValue& in_actionValue)
 {
-	auto moveVec = in_actionValue.Get<FVector2D>();
-	UKismetSystemLibrary::PrintString(this, moveVec.ToString());
+	m_input = in_actionValue.Get<FVector2D>();
+}
+
+void AMuertePlayerBase::OnMoveCanceled(const FInputActionValue& in_actionValue)
+{
+	m_input = FVector2D::ZeroVector;
 }
