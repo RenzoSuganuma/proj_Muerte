@@ -25,7 +25,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> m_inputActionMove;
 	
-	FVector2D m_input;
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> m_inputActionLook;
+	
+	FVector2D m_inputMove;
+	FVector2D m_inputLook;
 
 public:
 	// Sets default values for this character's properties
@@ -43,7 +47,13 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	// WASD移動の入力が入った時
-	void ActionMove(const FInputActionValue& in_actionValue);
+	void OnActionMove(const FInputActionValue& in_actionValue);
 	// 入力→入力なしの状態になった時
 	void OnMoveCanceled(const FInputActionValue& in_actionValue);
+
+	
+	// WASD移動の入力が入った時
+	void OnActionLook(const FInputActionValue& in_actionValue);
+	// 入力→入力なしの状態になった時
+	void OnLookCanceled(const FInputActionValue& in_actionValue);
 };

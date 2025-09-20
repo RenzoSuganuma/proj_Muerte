@@ -23,7 +23,10 @@ void AMuertePlayerControllerBase::BeginPlay()
 		UEnhancedInputLocalPlayerSubsystem>())
 	{
 		inputSystem->ClearAllMappings();
-		inputSystem->AddMappingContext(m_mappingContext, 0);
+		if (m_defaultMappingContext)
+			inputSystem->AddMappingContext(m_defaultMappingContext, 0);
+		if (m_mouseLookMappingContext)
+			inputSystem->AddMappingContext(m_mouseLookMappingContext, 0);
 	}
 }
 

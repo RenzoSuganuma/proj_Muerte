@@ -16,7 +16,10 @@ class PROJ_MUERTE_API AMuertePlayerControllerBase : public APlayerController
 
 private:
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<UInputMappingContext> m_mappingContext;
+	TObjectPtr<UInputMappingContext> m_defaultMappingContext;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputMappingContext> m_mouseLookMappingContext;
 
 	TObjectPtr<UEnhancedInputComponent> m_inputComponent;
 
