@@ -13,11 +13,16 @@ class PROJ_MUERTE_API UMuerteGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY(EditAnywhere)
+	float m_mouseSensitivity;
+
 	friend class AMuertePlayerBase;
 
-private:
 	TObjectPtr<AMuertePlayerBase> m_playerActor;
 
 public:
 	TObjectPtr<AMuertePlayerBase> GetPlayerActor();
+
+	inline float GetMouseSensitivity() { return m_mouseSensitivity; }
 };

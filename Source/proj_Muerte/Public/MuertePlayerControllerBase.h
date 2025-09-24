@@ -31,13 +31,11 @@ class PROJ_MUERTE_API AMuertePlayerControllerBase : public APlayerController
 	TObjectPtr<UInputAction> m_iActionMouseLook;
 
 private:
-	TObjectPtr<UMuerteGameInstance> m_game;
+	TObjectPtr<UMuerteGameInstance> m_gi;
 	
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 
 	void OnMove(const FInputActionValue& value);
-	void OnMoveCanceled(const FInputActionValue& value);
 	void OnLook(const FInputActionValue& value);
-	void OnLookCanceled(const FInputActionValue& value);
 };

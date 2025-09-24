@@ -23,22 +23,14 @@ void AMuertePlayerControllerBase::BeginPlay()
 		// 移動
 		input->BindAction(m_iActionMove, ETriggerEvent::Triggered, this,
 		                  &AMuertePlayerControllerBase::OnMove);
-		input->BindAction(m_iActionMove, ETriggerEvent::Completed, this,
-		                  &AMuertePlayerControllerBase::OnMoveCanceled);
-		input->BindAction(m_iActionMove, ETriggerEvent::Canceled, this,
-		                  &AMuertePlayerControllerBase::OnMoveCanceled);
 		// マウス視点操作
 		input->BindAction(m_iActionMouseLook, ETriggerEvent::Triggered, this,
 		                  &AMuertePlayerControllerBase::OnLook);
-		input->BindAction(m_iActionMouseLook, ETriggerEvent::Completed, this,
-		                  &AMuertePlayerControllerBase::OnLookCanceled);
-		input->BindAction(m_iActionMouseLook, ETriggerEvent::Canceled, this,
-		                  &AMuertePlayerControllerBase::OnLookCanceled);
 	}
 
 	if (TObjectPtr<UMuerteGameInstance> i = Cast<UMuerteGameInstance>(GetGameInstance()))
 	{
-		m_game = i;
+		m_gi = i;
 	}
 }
 
@@ -50,30 +42,22 @@ void AMuertePlayerControllerBase::Destroyed()
 	auto inputSystem = GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
 	inputSystem->ClearAllMappings();
 
-	m_game = nullptr;
+	m_gi = nullptr;
 }
 
 void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
 {
 	auto input = value.Get<FVector2D>();
-	m_game->GetPlayerActor()->AddMovementInput(m_game->GetPlayerActor()->GetActorLocation().ForwardVector * input.Y);
-	m_game->GetPlayerActor()->AddMovementInput(m_game->GetPlayerActor()->GetActorLocation().RightVector * input.X);
-}
-
-void AMuertePlayerControllerBase::OnMoveCanceled(const FInputActionValue& value)
-{
-	m_game->GetPlayerActor()->AddMovementInput(m_game->GetPlayerActor()->GetActorLocation().ForwardVector * 0.f);
-	m_game->GetPlayerActor()->AddMovementInput(m_game->GetPlayerActor()->GetActorLocation().RightVector * 0.f);
+	m_gi->GetPlayerActor()->AddMovementInput(
+		m_gi->GetPlayerActor()->GetActorForwardVector() * input.Y);
+	m_gi->GetPlayerActor()->AddMovementInput(
+		m_gi->GetPlayerActor()->GetActorRightVector() * input.X);
 }
 
 void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)
 {
 	auto input = value.Get<FVector2D>();
-	m_game->GetPlayerActor()->GetActorTransform().Rotator().Add(0.f, input.X, 0.f);
-}
-
-void AMuertePlayerControllerBase::OnLookCanceled(const FInputActionValue& value)
-{
-	auto input = value.Get<FVector2D>();
-	m_game->GetPlayerActor()->GetActorTransform().Rotator().Add(0.f, 0.f, 0.f);
+	ControlRotation.Add(0.f,
+	                    input.X * (m_gi ? 1.f : m_gi->GetMouseSensitivity()),
+	                    0.f);
 }
