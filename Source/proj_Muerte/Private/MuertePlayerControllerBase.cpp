@@ -48,16 +48,19 @@ void AMuertePlayerControllerBase::Destroyed()
 void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
 {
 	auto input = value.Get<FVector2D>();
-	m_gi->GetPlayerActor()->AddMovementInput(
-		m_gi->GetPlayerActor()->GetActorForwardVector() * input.Y);
-	m_gi->GetPlayerActor()->AddMovementInput(
-		m_gi->GetPlayerActor()->GetActorRightVector() * input.X);
+	auto f = m_gi->GetPlayerActor()->GetActorForwardVector();
+	auto r = m_gi->GetPlayerActor()->GetActorRightVector();
+	f *= FVector(1.f, 1.f, 0.f);
+	r *= FVector(1.f, 1.f, 0.f);
+	m_gi->GetPlayerActor()->AddMovementInput(f * input.Y);
+	m_gi->GetPlayerActor()->AddMovementInput(r * input.X);
 }
 
 void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)
 {
 	auto input = value.Get<FVector2D>();
-	ControlRotation.Add(0.f,
-	                    input.X * (m_gi ? 1.f : m_gi->GetMouseSensitivity()),
-	                    0.f);
+	ControlRotation.Add(
+		input.Y * (m_gi ? 1.f : m_gi->GetMouseSensitivity().Y) * (m_gi->GetMouseInverseY() ? -1.f : 1.f),
+		input.X * (m_gi ? 1.f : m_gi->GetMouseSensitivity().X),
+		0.f);
 }

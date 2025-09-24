@@ -15,7 +15,10 @@ class PROJ_MUERTE_API UMuerteGameInstance : public UGameInstance
 
 private:
 	UPROPERTY(EditAnywhere)
-	float m_mouseSensitivity;
+	FVector2D m_mouseSensitivity;
+
+	UPROPERTY(EditAnywhere)
+	bool m_inverseMouseY;
 
 	friend class AMuertePlayerBase;
 
@@ -24,5 +27,7 @@ private:
 public:
 	TObjectPtr<AMuertePlayerBase> GetPlayerActor();
 
-	inline float GetMouseSensitivity() { return m_mouseSensitivity; }
+	inline const FVector2D GetMouseSensitivity() const { return m_mouseSensitivity; }
+
+	inline const bool GetMouseInverseY() const { return m_inverseMouseY; }
 };
