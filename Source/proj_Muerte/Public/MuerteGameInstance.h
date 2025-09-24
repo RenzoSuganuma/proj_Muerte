@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "MuertePlayerControllerBase.h"
+#include "MuertePlayerBase.h"
 #include "MuerteGameInstance.generated.h"
 
 // Muerteゲームインスタンスのクラス
@@ -13,13 +13,11 @@ class PROJ_MUERTE_API UMuerteGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
-	// 
-	friend class AMuertePlayerControllerBase; // ←サービスロケーター的な使い方をしたいのでこのような書き方
+	friend class AMuertePlayerBase;
 
 private:
-	TObjectPtr<AMuertePlayerControllerBase> m_playerController;
+	TObjectPtr<AMuertePlayerBase> m_playerActor;
 
 public:
-	// MuertePlayerControllerを返す
-	TObjectPtr<AMuertePlayerControllerBase> GetPlayerController();
+	TObjectPtr<AMuertePlayerBase> GetPlayerActor();
 };

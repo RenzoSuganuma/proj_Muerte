@@ -6,6 +6,10 @@
 #include "GameFramework/PlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "InputAction.h"
+#include "InputMappingContext.h"
+#include "InputActionValue.h"
+#include "MuerteGameInstance.h"
 #include "MuertePlayerControllerBase.generated.h"
 
 // プレイヤーコントローラーの基底クラス
@@ -14,19 +18,26 @@ class PROJ_MUERTE_API AMuertePlayerControllerBase : public APlayerController
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputMappingContext> m_mapDefault;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputMappingContext> m_mapMouseLook;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> m_iActionMove;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> m_iActionMouseLook;
+
 private:
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<UInputMappingContext> m_defaultMappingContext;
-
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<UInputMappingContext> m_mouseLookMappingContext;
-
-	TObjectPtr<UEnhancedInputComponent> m_inputComponent;
-
+	TObjectPtr<UMuerteGameInstance> m_game;
+	
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 
-public:
-	// EnhancedInputComponentを返す
-	TObjectPtr<UEnhancedInputComponent> GetInputComponent();
+	void OnMove(const FInputActionValue& value);
+	void OnMoveCanceled(const FInputActionValue& value);
+	void OnLook(const FInputActionValue& value);
+	void OnLookCanceled(const FInputActionValue& value);
 };

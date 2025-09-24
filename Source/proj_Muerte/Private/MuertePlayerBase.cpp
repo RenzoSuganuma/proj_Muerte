@@ -19,6 +19,12 @@ void AMuertePlayerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// ゲームインスタンスに自分をバインドする
+	if (TObjectPtr<UMuerteGameInstance> i = Cast<UMuerteGameInstance>(GetGameInstance()))
+	{
+		i->m_playerActor = this;
+	}
+
 	// カメラコンポーネントを取得
 	TArray<USceneComponent*> components;
 	GetRootComponent()->GetChildrenComponents(true, components);
@@ -36,57 +42,12 @@ void AMuertePlayerBase::BeginPlay()
 	{
 		m_cameraComponent->SetFieldOfView(m_fovDefault);
 	}
-
-	// 入力のセットアップ
-	if (UMuerteGameInstance* instance = Cast<UMuerteGameInstance>(GetGameInstance()))
-	{
-		if (TObjectPtr<UEnhancedInputComponent> input = instance->GetPlayerController()->GetInputComponent())
-		{
-			// Move
-			input->BindAction(
-				m_inputActionMove, ETriggerEvent::Triggered, this,
-				&AMuertePlayerBase::OnActionMove);
-			input->BindAction(
-				m_inputActionMove, ETriggerEvent::Completed, this,
-				&AMuertePlayerBase::OnMoveCanceled);
-			input->BindAction(
-				m_inputActionMove, ETriggerEvent::Canceled, this,
-				&AMuertePlayerBase::OnMoveCanceled);
-			// Look
-			input->BindAction(
-				m_inputActionLook, ETriggerEvent::Triggered, this,
-				&AMuertePlayerBase::OnActionLook);
-			input->BindAction(
-				m_inputActionLook, ETriggerEvent::Completed, this,
-				&AMuertePlayerBase::OnActionLook);
-			input->BindAction(
-				m_inputActionLook, ETriggerEvent::Canceled, this,
-				&AMuertePlayerBase::OnActionLook);
-		}
-	}
 }
 
 // Called every frame
 void AMuertePlayerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	auto arrow = GetArrowComponent();
-	auto move = GetCharacterMovement();
-	if (move and arrow)
-	{
-		auto forwardV = arrow->GetForwardVector() * m_inputMove.Y;
-		auto rightV = arrow->GetRightVector() * m_inputMove.X;
-		auto inputRaw = (forwardV + rightV);
-		inputRaw.Normalize();
-		move->AddInputVector(inputRaw);
-	}
-
-	// Y-Axis Look
-	auto trans = GetActorTransform();
-	auto rotator = trans.Rotator().Add(0, m_inputLook.X * 100.0f, 0);
-	trans.SetRotation(rotator.Quaternion());
-	SetActorTransform(trans);
 }
 
 // Called to bind functionality to input
@@ -95,24 +56,13 @@ void AMuertePlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void AMuertePlayerBase::OnActionMove(const FInputActionValue& in_actionValue)
+void AMuertePlayerBase::Destroyed()
 {
-	m_inputMove = in_actionValue.Get<FVector2D>();
-}
+	Super::Destroyed();
 
-void AMuertePlayerBase::OnMoveCanceled(const FInputActionValue& in_actionValue)
-{
-	m_inputMove = FVector2D::ZeroVector;
-}
-
-void AMuertePlayerBase::OnActionLook(const FInputActionValue& in_actionValue)
-{
-	m_inputLook = in_actionValue.Get<FVector2D>();
-
-	UKismetSystemLibrary::PrintString(this, m_inputLook.ToString());
-}
-
-void AMuertePlayerBase::OnLookCanceled(const FInputActionValue& in_actionValue)
-{
-	m_inputLook = FVector2D::ZeroVector;
+	// ゲームインスタンスに自分をバインド『解除』する
+	if (TObjectPtr<UMuerteGameInstance> i = Cast<UMuerteGameInstance>(GetGameInstance()))
+	{
+		i->m_playerActor = nullptr;
+	}
 }

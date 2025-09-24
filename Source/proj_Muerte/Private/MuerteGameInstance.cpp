@@ -3,7 +3,7 @@
 
 #include "MuerteGameInstance.h"
 
-TObjectPtr<AMuertePlayerControllerBase> UMuerteGameInstance::GetPlayerController()
+TObjectPtr<ACharacter> UMuerteGameInstance::GetPlayerActor()
 {
-	return m_playerController;
+	return m_playerActor;
 }
