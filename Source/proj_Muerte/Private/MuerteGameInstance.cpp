@@ -2,8 +2,3 @@
 
 
 #include "MuerteGameInstance.h"
-
-TObjectPtr<AMuertePlayerBase> UMuerteGameInstance::GetPlayerActor()
-{
-	return m_playerActor;
-}

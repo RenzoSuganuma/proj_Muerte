@@ -13,5 +13,9 @@ UCLASS()
 class PROJ_MUERTE_API AMuerteEnemyAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UBehaviorTree> m_behaviourTree;
+
+	virtual void BeginPlay() override;
 };

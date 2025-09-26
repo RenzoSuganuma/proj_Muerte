@@ -3,6 +3,7 @@
 
 #include "MuertePlayerControllerBase.h"
 #include "MuerteGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void AMuertePlayerControllerBase::BeginPlay()
@@ -48,12 +49,13 @@ void AMuertePlayerControllerBase::Destroyed()
 void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
 {
 	auto input = value.Get<FVector2D>();
-	auto f = m_gi->GetPlayerActor()->GetActorForwardVector();
-	auto r = m_gi->GetPlayerActor()->GetActorRightVector();
+	auto player = UGameplayStatics::GetPlayerPawn(this , 0);
+	auto f = player->GetActorForwardVector();
+	auto r = player->GetActorRightVector();
 	f *= FVector(1.f, 1.f, 0.f);
 	r *= FVector(1.f, 1.f, 0.f);
-	m_gi->GetPlayerActor()->AddMovementInput(f * input.Y);
-	m_gi->GetPlayerActor()->AddMovementInput(r * input.X);
+	player->AddMovementInput(f * input.Y);
+	player->AddMovementInput(r * input.X);
 }
 
 void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)

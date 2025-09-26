@@ -19,12 +19,6 @@ void AMuertePlayerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ゲームインスタンスに自分をバインドする
-	if (TObjectPtr<UMuerteGameInstance> i = Cast<UMuerteGameInstance>(GetGameInstance()))
-	{
-		i->m_playerActor = this;
-	}
-
 	// カメラコンポーネントを取得
 	TArray<USceneComponent*> components;
 	GetRootComponent()->GetChildrenComponents(true, components);
@@ -59,10 +53,4 @@ void AMuertePlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void AMuertePlayerBase::Destroyed()
 {
 	Super::Destroyed();
-
-	// ゲームインスタンスに自分をバインド『解除』する
-	if (TObjectPtr<UMuerteGameInstance> i = Cast<UMuerteGameInstance>(GetGameInstance()))
-	{
-		i->m_playerActor = nullptr;
-	}
 }
