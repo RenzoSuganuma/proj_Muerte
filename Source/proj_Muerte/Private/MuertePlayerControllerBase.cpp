@@ -77,8 +77,13 @@ void AMuertePlayerControllerBase::OnMoveCanceled(const FInputActionValue& value)
 void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)
 {
 	auto input = value.Get<FVector2D>();
+
+	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
+	player->AddControllerYawInput(input.X * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().X));
+
+	// ここでカメラの回転を実行、実際にプレイヤーキャラにはPitch回転のみ適応する
 	ControlRotation.Add(
 		input.Y * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().Y) * (m_gi->GetMouseInverseY() ? -1.0f : 1.0f),
-		input.X * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().X),
+		0.0f,
 		0.0f);
 }
