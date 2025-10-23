@@ -37,6 +37,5 @@ private:
 	virtual void Destroyed() override;
 
 	void OnMove(const FInputActionValue& value);
-	void OnMoveCanceled(const FInputActionValue& value);
 	void OnLook(const FInputActionValue& value);
 };

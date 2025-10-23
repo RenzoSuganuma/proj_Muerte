@@ -24,8 +24,6 @@ void AMuertePlayerControllerBase::BeginPlay()
 		// 移動
 		input->BindAction(m_iActionMove, ETriggerEvent::Triggered, this,
 		                  &AMuertePlayerControllerBase::OnMove);
-		input->BindAction(m_iActionMove, ETriggerEvent::Canceled, this,
-		                  &AMuertePlayerControllerBase::OnMoveCanceled);
 		// マウス視点操作
 		input->BindAction(m_iActionMouseLook, ETriggerEvent::Triggered, this,
 		                  &AMuertePlayerControllerBase::OnLook);
@@ -53,6 +51,7 @@ void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
 	auto input = value.Get<FVector2D>();
 
 	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
+	if (!player || input.IsZero()) return;
 
 	auto f = player->GetActorForwardVector();
 	auto r = player->GetActorRightVector();
@@ -60,18 +59,16 @@ void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
 	r *= FVector(1.0f, 1.0f, 0.0f);
 
 	FVector movement = f * input.Y + r * input.X;
-	movement.Normalize();
 
-	player->AddMovementInput(movement);
-}
-
-void AMuertePlayerControllerBase::OnMoveCanceled(const FInputActionValue& value)
-{
-	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
-	if (player)
+	// 入力が非常に小さい場合は移動を停止
+	if (movement.SizeSquared() < 0.01f)
 	{
 		player->ConsumeMovementInputVector();
+		return;
 	}
+
+	movement.Normalize();
+	player->AddMovementInput(movement);
 }
 
 void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)
