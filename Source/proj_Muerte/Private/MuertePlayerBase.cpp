@@ -67,8 +67,8 @@ void AMuertePlayerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	// 滑り防止処理を適用
-	ApplyAntiSlideMovement();
+	// 滑り防止処理を適用（DeltaTimeを渡す）
+	ApplyAntiSlideMovement(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -99,7 +99,7 @@ void AMuertePlayerBase::SetMovementParameters()
 	}
 }
 
-void AMuertePlayerBase::ApplyAntiSlideMovement()
+void AMuertePlayerBase::ApplyAntiSlideMovement(float DeltaTime)
 {
 	if (UCharacterMovementComponent* MovementComp = GetCharacterMovement())
 	{
@@ -112,8 +112,14 @@ void AMuertePlayerBase::ApplyAntiSlideMovement()
 			// 地面にいる場合のみ適用
 			if (MovementComp->IsMovingOnGround())
 			{
-				// より強い減速を適用
-				FVector AntiSlideForce = -CurrentVelocity * 0.5f;
+				// DeltaTimeが渡されていない場合は取得
+				if (DeltaTime <= 0.0f)
+				{
+					DeltaTime = GetWorld()->GetDeltaSeconds();
+				}
+				
+				// DeltaTimeを使用してフレームレートに依存しない減速を適用
+				FVector AntiSlideForce = -CurrentVelocity * 0.5f * DeltaTime;
 				MovementComp->AddForce(AntiSlideForce);
 			}
 		}

@@ -5,6 +5,8 @@
 #include "MuerteGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Engine/Engine.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 void AMuertePlayerControllerBase::BeginPlay()
 {
@@ -48,39 +50,39 @@ void AMuertePlayerControllerBase::Destroyed()
 
 void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
 {
-	auto input = value.Get<FVector2D>();
-
+	auto input = value.Get<FVector2D>().GetSafeNormal();
+	double deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
-	if (!player || input.IsZero()) return;
+	if (!player) return;
+
+	if (input.X == 0.0f || input.Y == 0.0f)
+	{
+		auto vel = player->GetMovementComponent()->Velocity;
+		if (vel.X != 0.0f || vel.Y != 0.0f)
+		{
+			player->GetMovementComponent()->StopMovementImmediately();
+		}
+	}
 
 	auto f = player->GetActorForwardVector();
 	auto r = player->GetActorRightVector();
-	f *= FVector(1.0f, 1.0f, 0.0f);
-	r *= FVector(1.0f, 1.0f, 0.0f);
+	f *= input.Y;
+	r *= input.X;
 
-	FVector movement = f * input.Y + r * input.X;
-
-	// 入力が非常に小さい場合は移動を停止
-	if (movement.SizeSquared() < 0.01f)
-	{
-		player->ConsumeMovementInputVector();
-		return;
-	}
-
-	movement.Normalize();
-	player->AddMovementInput(movement);
+	player->AddMovementInput(f);
+	player->AddMovementInput(r);
 }
 
 void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)
 {
 	auto input = value.Get<FVector2D>();
-
+	double deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
-	player->AddControllerYawInput(input.X * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().X));
+	player->AddControllerYawInput(deltaTime * input.X * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().X));
 
 	// ここでカメラの回転を実行、実際にプレイヤーキャラにはPitch回転のみ適応する
 	ControlRotation.Add(
-		input.Y * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().Y) * (m_gi->GetMouseInverseY() ? -1.0f : 1.0f),
+		deltaTime * input.Y * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().Y) * (m_gi->GetMouseInverseY() ? -1.0f : 1.0f),
 		0.0f,
 		0.0f);
 }

@@ -45,5 +45,5 @@ public:
 
 	// 滑りを軽減するための移動制御
 	UFUNCTION(BlueprintCallable, Category = "Movement")
-	void ApplyAntiSlideMovement();
+	void ApplyAntiSlideMovement(float DeltaTime);
 };
