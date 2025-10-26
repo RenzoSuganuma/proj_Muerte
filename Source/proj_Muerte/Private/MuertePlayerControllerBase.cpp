@@ -53,24 +53,14 @@ void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
 	auto input = value.Get<FVector2D>().GetSafeNormal();
 	double deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
+	auto movement = player->GetMovementComponent();
 	if (!player) return;
-
-	if (input.X == 0.0f || input.Y == 0.0f)
-	{
-		auto vel = player->GetMovementComponent()->Velocity;
-		if (vel.X != 0.0f || vel.Y != 0.0f)
-		{
-			player->GetMovementComponent()->StopMovementImmediately();
-		}
-	}
 
 	auto f = player->GetActorForwardVector();
 	auto r = player->GetActorRightVector();
-	f *= input.Y;
-	r *= input.X;
+	FVector translate = f * input.Y + r * input.X;
 
-	player->AddMovementInput(f);
-	player->AddMovementInput(r);
+	movement->AddInputVector(translate, true);
 }
 
 void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)
@@ -78,11 +68,11 @@ void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)
 	auto input = value.Get<FVector2D>();
 	double deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
-	player->AddControllerYawInput(deltaTime * input.X * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().X));
+	player->AddControllerYawInput(input.X * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().X));
 
 	// ここでカメラの回転を実行、実際にプレイヤーキャラにはPitch回転のみ適応する
 	ControlRotation.Add(
-		deltaTime * input.Y * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().Y) * (m_gi->GetMouseInverseY() ? -1.0f : 1.0f),
+		input.Y * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().Y) * (m_gi->GetMouseInverseY() ? -1.0f : 1.0f),
 		0.0f,
 		0.0f);
 }

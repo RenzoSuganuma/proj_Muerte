@@ -38,12 +38,4 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual void Destroyed() override;
-
-	// カスタム移動制御
-	UFUNCTION(BlueprintCallable, Category = "Movement")
-	void SetMovementParameters();
-
-	// 滑りを軽減するための移動制御
-	UFUNCTION(BlueprintCallable, Category = "Movement")
-	void ApplyAntiSlideMovement(float DeltaTime);
 };
