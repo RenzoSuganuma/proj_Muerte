@@ -4,7 +4,6 @@
 #include "MuertePlayerControllerBase.h"
 #include "MuerteGameInstance.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "Engine/Engine.h"
 #include "GameFramework/PawnMovementComponent.h"
 
@@ -59,14 +58,12 @@ void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
 	auto f = player->GetActorForwardVector();
 	auto r = player->GetActorRightVector();
 	FVector translate = f * input.Y + r * input.X;
-
 	movement->AddInputVector(translate, true);
 }
 
 void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)
 {
 	auto input = value.Get<FVector2D>();
-	double deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
 	player->AddControllerYawInput(input.X * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().X));
 

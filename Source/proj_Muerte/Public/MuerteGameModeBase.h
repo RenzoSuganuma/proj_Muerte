@@ -11,5 +11,4 @@ UCLASS()
 class PROJ_MUERTE_API AMuerteGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
 };

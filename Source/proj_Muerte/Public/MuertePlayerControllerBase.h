@@ -32,6 +32,8 @@ class PROJ_MUERTE_API AMuertePlayerControllerBase : public APlayerController
 
 private:
 	TObjectPtr<UMuerteGameInstance> m_gi;
+
+	bool m_isSprint;
 	
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
