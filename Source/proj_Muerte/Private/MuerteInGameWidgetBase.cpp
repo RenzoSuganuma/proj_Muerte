@@ -2,6 +2,7 @@
 
 
 #include "MuerteInGameWidgetBase.h"
+
 #include "Components/TextBlock.h"
 
 void UMuerteInGameWidgetBase::NativeConstruct()
@@ -10,7 +11,7 @@ void UMuerteInGameWidgetBase::NativeConstruct()
 
 	m_objectiveText = Cast<UTextBlock>(GetWidgetFromName(m_objectiveTextName));
 
-	ShowFadePanel();
+	ShowTitlePanel();
 }
 
 void UMuerteInGameWidgetBase::SetObjectiveText(const FText& content)
@@ -20,8 +21,15 @@ void UMuerteInGameWidgetBase::SetObjectiveText(const FText& content)
 
 void UMuerteInGameWidgetBase::HideFadePanel_Implementation()
 {
+	// ブループリント側からコールされる
 }
 
 void UMuerteInGameWidgetBase::ShowFadePanel_Implementation()
 {
+	// ブループリント側からコールされる
+}
+
+void UMuerteInGameWidgetBase::ShowTitlePanel_Implementation()
+{
+	// ブループリント側からコールされる
 }

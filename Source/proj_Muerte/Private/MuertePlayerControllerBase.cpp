@@ -3,6 +3,7 @@
 
 #include "MuertePlayerControllerBase.h"
 #include "MuerteGameInstance.h"
+#include "MuerteGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Engine.h"
 #include "GameFramework/PawnMovementComponent.h"
@@ -32,7 +33,7 @@ void AMuertePlayerControllerBase::BeginPlay()
 
 	if (TObjectPtr<UMuerteGameInstance> i = Cast<UMuerteGameInstance>(GetGameInstance()))
 	{
-		m_gi = i;
+		m_gameInstance = i;
 	}
 }
 
@@ -44,7 +45,7 @@ void AMuertePlayerControllerBase::Destroyed()
 	auto inputSystem = GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
 	inputSystem->ClearAllMappings();
 
-	m_gi = nullptr;
+	m_gameInstance = nullptr;
 }
 
 void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
@@ -65,11 +66,12 @@ void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)
 {
 	auto input = value.Get<FVector2D>();
 	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
-	player->AddControllerYawInput(input.X * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().X));
+	player->AddControllerYawInput(input.X * (m_gameInstance ? 1.0f : m_gameInstance->GetMouseSensitivity().X));
 
 	// ここでカメラの回転を実行、実際にプレイヤーキャラにはPitch回転のみ適応する
 	ControlRotation.Add(
-		input.Y * (m_gi ? 1.0f : m_gi->GetMouseSensitivity().Y) * (m_gi->GetMouseInverseY() ? -1.0f : 1.0f),
+		input.Y * (m_gameInstance ? 1.0f : m_gameInstance->GetMouseSensitivity().Y) * (
+			m_gameInstance->GetMouseInverseY() ? -1.0f : 1.0f),
 		0.0f,
 		0.0f);
 }

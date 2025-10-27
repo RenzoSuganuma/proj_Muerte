@@ -34,4 +34,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ShowFadePanel();
 	virtual void ShowFadePanel_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ShowTitlePanel();
+	virtual void ShowTitlePanel_Implementation();
 };

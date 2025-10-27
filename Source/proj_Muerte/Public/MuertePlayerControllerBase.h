@@ -31,7 +31,7 @@ class PROJ_MUERTE_API AMuertePlayerControllerBase : public APlayerController
 	TObjectPtr<UInputAction> m_iActionMouseLook;
 
 private:
-	TObjectPtr<UMuerteGameInstance> m_gi;
+	TObjectPtr<UMuerteGameInstance> m_gameInstance;
 
 	bool m_isSprint;
 	

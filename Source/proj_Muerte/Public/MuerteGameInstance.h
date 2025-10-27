@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EMuerteGameStatusEnum.h"
 #include "Engine/GameInstance.h"
-#include "MuertePlayerBase.h"
 #include "MuerteGameInstance.generated.h"
 
 // Muerteゲームインスタンスのクラス
@@ -22,8 +22,22 @@ private:
 
 	friend class AMuertePlayerBase;
 
-public:
-	inline const FVector2D GetMouseSensitivity() const { return m_mouseSensitivity; }
+	EMuerteGameStatusEnum m_status;
 
-	inline const bool GetMouseInverseY() const { return m_inverseMouseY; }
+public:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGameStatusChanged, EMuerteGameStatusEnum, newStatus);
+
+	FOnGameStatusChanged OnGameStatusChanged;
+
+	// 関数シグネチャ
+	FVector2D GetMouseSensitivity() const { return m_mouseSensitivity; }
+	bool GetMouseInverseY() const { return m_inverseMouseY; }
+
+	void SetGameStatus(EMuerteGameStatusEnum newStatus)
+	{
+		m_status = newStatus;
+		OnGameStatusChanged.Broadcast(newStatus);
+	}
+
+	EMuerteGameStatusEnum GetGameStatus() const { return m_status; }
 };

@@ -3,10 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MuerteInGameWidgetBase.h"
 #include "GameFramework/HUD.h"
 #include "MuerteHUDBase.generated.h"
-
-class UMuerteInGameInterface;
 
 // MuerteのHUD基底クラス
 UCLASS()
@@ -14,7 +13,10 @@ class PROJ_MUERTE_API AMuerteHUDBase : public AHUD
 {
 	GENERATED_BODY()
 
-	TObjectPtr<UMuerteInGameInterface> m_interface;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> m_widget;
 	
+	TObjectPtr<UUserWidget> m_interface;
+
 	virtual void BeginPlay() override;
 };

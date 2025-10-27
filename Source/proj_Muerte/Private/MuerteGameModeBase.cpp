@@ -3,3 +3,17 @@
 
 #include "MuerteGameModeBase.h"
 
+void AMuerteGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (UMuerteGameInstance* Instance = Cast<UMuerteGameInstance>(GetGameInstance()))
+	{
+		m_gameInstance = Instance;
+	}
+}
+
+void AMuerteGameModeBase::Destroyed()
+{
+	Super::Destroyed();
+}
