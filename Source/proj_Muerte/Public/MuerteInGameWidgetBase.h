@@ -21,6 +21,22 @@ private:
 	FName m_objectiveTextName;
 	TObjectPtr<UTextBlock> m_objectiveText;
 
+	UPROPERTY(EditAnywhere)
+	FName m_interrogationTextName;
+	TObjectPtr<UTextBlock> m_interrogationText;
+
+	UPROPERTY(EditAnywhere)
+	FName m_select1TextName;
+	TObjectPtr<UTextBlock> m_select1Text;
+
+	UPROPERTY(EditAnywhere)
+	FName m_select2TextName;
+	TObjectPtr<UTextBlock> m_select2Text;
+
+	UPROPERTY(EditAnywhere)
+	FName m_select3TextName;
+	TObjectPtr<UTextBlock> m_select3Text;
+
 	virtual void NativeConstruct() override;
 
 public:
@@ -28,14 +44,18 @@ public:
 	void SetObjectiveText(FText content);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void HideFadePanel();
-	virtual void HideFadePanel_Implementation();
-	
+	void HideInGamePanel();
+	virtual void HideInGamePanel_Implementation();
+
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ShowFadePanel();
-	virtual void ShowFadePanel_Implementation();
+	void ShowInGamePanel();
+	virtual void ShowInGamePanel_Implementation();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ShowTitlePanel();
 	virtual void ShowTitlePanel_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ShowInterrogationPanel();
+	virtual void ShowInterrogationPanel_Implementation();
 };
