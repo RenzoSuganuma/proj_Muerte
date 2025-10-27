@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MuerteEnemyBase.h"
 #include "MuerteGameInstance.h"
 #include "GameFramework/GameModeBase.h"
 #include "MuerteGameModeBase.generated.h"

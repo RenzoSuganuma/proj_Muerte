@@ -25,7 +25,7 @@ private:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void SetObjectiveText(const FText& content);
+	void SetObjectiveText(FText content);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void HideFadePanel();

@@ -14,7 +14,7 @@ void UMuerteInGameWidgetBase::NativeConstruct()
 	ShowTitlePanel();
 }
 
-void UMuerteInGameWidgetBase::SetObjectiveText(const FText& content)
+void UMuerteInGameWidgetBase::SetObjectiveText(FText content)
 {
 	m_objectiveText->SetText(content);
 }

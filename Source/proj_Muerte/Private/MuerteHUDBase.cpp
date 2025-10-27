@@ -4,8 +4,19 @@
 
 void AMuerteHUDBase::BeginPlay()
 {
-	m_interface = CreateWidget(GetOwningPlayerController(), m_widget.Get());
-	m_interface->AddToPlayerScreen(0);
+	auto widget = CreateWidget(GetOwningPlayerController(), m_widget.Get());
+	widget->AddToPlayerScreen(0);
+
+	if (UMuerteInGameWidgetBase* temp = Cast<UMuerteInGameWidgetBase>(widget))
+	{
+		m_interface = temp;
+		m_interface->SetObjectiveText(FText::FromString(TEXT("出口を見つける")));
+	}
 
 	Super::BeginPlay();
+}
+
+TObjectPtr<UMuerteInGameWidgetBase> AMuerteHUDBase::GetWidget() const
+{
+	return m_interface;
 }

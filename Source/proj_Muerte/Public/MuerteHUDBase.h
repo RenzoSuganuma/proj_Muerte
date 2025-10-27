@@ -15,8 +15,11 @@ class PROJ_MUERTE_API AMuerteHUDBase : public AHUD
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> m_widget;
-	
-	TObjectPtr<UUserWidget> m_interface;
+
+	TObjectPtr<UMuerteInGameWidgetBase> m_interface;
 
 	virtual void BeginPlay() override;
+
+public:
+	TObjectPtr<UMuerteInGameWidgetBase> GetWidget() const;
 };

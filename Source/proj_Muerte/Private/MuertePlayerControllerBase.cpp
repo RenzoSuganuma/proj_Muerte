@@ -50,6 +50,11 @@ void AMuertePlayerControllerBase::Destroyed()
 
 void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
 {
+	if ( m_gameInstance->GetGameStatus() != EMuerteGameStatusEnum::InGame )
+	{
+		return;
+	}
+	
 	auto input = value.Get<FVector2D>().GetSafeNormal();
 	double deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
@@ -64,6 +69,11 @@ void AMuertePlayerControllerBase::OnMove(const FInputActionValue& value)
 
 void AMuertePlayerControllerBase::OnLook(const FInputActionValue& value)
 {
+	if ( m_gameInstance->GetGameStatus() != EMuerteGameStatusEnum::InGame )
+	{
+		return;
+	}
+	
 	auto input = value.Get<FVector2D>();
 	auto player = UGameplayStatics::GetPlayerPawn(this, 0);
 	player->AddControllerYawInput(input.X * (m_gameInstance ? 1.0f : m_gameInstance->GetMouseSensitivity().X));

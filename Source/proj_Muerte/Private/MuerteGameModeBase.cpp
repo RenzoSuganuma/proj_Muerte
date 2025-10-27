@@ -2,6 +2,7 @@
 
 
 #include "MuerteGameModeBase.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void AMuerteGameModeBase::BeginPlay()
 {

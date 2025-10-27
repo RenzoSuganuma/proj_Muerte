@@ -33,11 +33,13 @@ public:
 	FVector2D GetMouseSensitivity() const { return m_mouseSensitivity; }
 	bool GetMouseInverseY() const { return m_inverseMouseY; }
 
+	UFUNCTION(BlueprintCallable)
 	void SetGameStatus(EMuerteGameStatusEnum newStatus)
 	{
 		m_status = newStatus;
 		OnGameStatusChanged.Broadcast(newStatus);
 	}
 
+	UFUNCTION(BlueprintCallable)
 	EMuerteGameStatusEnum GetGameStatus() const { return m_status; }
 };
