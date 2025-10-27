@@ -4,6 +4,7 @@
 #include "MuerteInGameWidgetBase.h"
 
 #include "Components/TextBlock.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void UMuerteInGameWidgetBase::NativeConstruct()
 {
@@ -41,4 +42,8 @@ void UMuerteInGameWidgetBase::ShowTitlePanel_Implementation()
 void UMuerteInGameWidgetBase::ShowInterrogationPanel_Implementation()
 {
 	// ブループリント側からコールされる
+	m_interrogationText->SetText(FText::FromString(TEXT("尋問文言")));
+	m_select1Text->SetText(FText::FromString(TEXT("選択肢A")));
+	m_select2Text->SetText(FText::FromString(TEXT("選択肢B")));
+	m_select3Text->SetText(FText::FromString(TEXT("選択肢C")));
 }
